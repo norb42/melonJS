@@ -37,6 +37,7 @@
 
 		// callback function for mouse & gyro
 		var mouseEventCB = null;
+		var mouseMoveCB = null;
 		var gyroEventCB = null;
 
 		// some usefull flags
@@ -172,6 +173,20 @@
 			// propagate the event to the callback with x,y coords
 			mouseEventCB(translateMouseCoords(e.clientX, e.clientY));
 		};
+		/* ---
+		
+			 mouse event management (move)
+			
+			---										*/
+		function onMouseMove(e) {
+			var x = e.clientX - me.video.getScreenCanvas().offsetLeft;
+			var y = e.clientY - me.video.getScreenCanvas().offsetTop;
+
+			// propagate the event to the callback with x,y coords
+			mouseMoveCB(x, y, e);
+
+		}
+		;
 
 		/* ---
 			
@@ -259,7 +274,7 @@
 			'W' : 87,
 			'X' : 88,
 			'Y' : 89,
-			'Z' : 90,
+			'Z' : 90
 		};
 
 		/**
@@ -355,10 +370,13 @@
 			if (enable) {
 				// add a listener for the mouse
 				me.video.getScreenCanvas().addEventListener('click', onMouseEvent, false);
+				me.video.getScreenCanvas().addEventListener('mousemove', onMouseMove, false);
 				// set the callback
 				mouseEventCB = callback || me.game.mouseEvent.bind(me.game);
+				mouseMoveCB = me.game.mouseMove.bind(me.game);
 			} else {
 				me.video.getScreenCanvas().removeEventListener('click', onMouseEvent, false);
+				me.video.getScreenCanvas().removeEventListener('mousemove', onMouseMove, false);
 			}
 		};
 

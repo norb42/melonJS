@@ -1270,6 +1270,34 @@
 			}
 		};
 
+		/**- 
+		 * propagate mouse move event to objects
+		 * @private
+		 */
+		
+		api.mouseMove = function(x, y, e) {
+
+		for ( var i = registeredMouseEventObj.length; i--;) {
+				
+				if ((x > registeredMouseEventObj[i].left) && (x < registeredMouseEventObj[i].right) && 
+					(y > registeredMouseEventObj[i].top) && (y < registeredMouseEventObj[i].bottom)) 
+				{
+					if (registeredMouseEventObj[i].mouseInside != true)
+						registeredMouseEventObj[i].mouseIn(e);
+					registeredMouseEventObj[i].mouseInside = true;
+					registeredMouseEventObj[i].mouseMove(x, y, e);
+				}
+				else
+				{
+					if (registeredMouseEventObj[i].mouseInside == true)
+					{
+						registeredMouseEventObj[i].mouseOut(e);
+						registeredMouseEventObj[i].mouseInside = false;
+					}
+				}				
+			}
+		};
+
 		/**
 		 * update all objects of the game manager
 		 * @name me.game#update
