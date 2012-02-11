@@ -1258,34 +1258,75 @@
 		 * propagate mouse event to objects
 		 * @private
 		 */
-		api.mouseEvent = function(v) {
+		api.mouseEvent = function(e, v) {
 			for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) {
-				if (obj.isClickable && obj.collisionBox.containsPoint(v)) {
-					if (obj.clicked()){
-						// stop propagating the event
-						// if the functin return true
-						break;
+
+			if (!obj.isClickable)
+				continue;
+				
+				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
+					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
+					{
+						obj.clicked(v.x, v.y, e);
 					}
 				}
+		};
+
+		/**- 
+		 * propagate mouse Down event to objects
+		 * @private
+		 */
+		api.mouseDown = function(e, v) {
+		for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
+		{
+			if (!obj.isClickable)
+				continue;
+				
+				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
+					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
+					{
+						obj.mouseDown(v.x, v.y, e);
+					}
 			}
 		};
 
+		/**- 
+		 * propagate mouse Up event to objects
+		 * @private
+		 */
+		api.mouseUp = function(e, v) {
+		for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
+		{
+			if (!obj.isClickable)
+				continue;
+				
+				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
+					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
+					{
+						obj.mouseUp(v.x, v.y, e);
+					}
+			}
+		};
+		
 		/**- 
 		 * propagate mouse move event to objects
 		 * @private
 		 */
 		
-		api.mouseMove = function(x, y, e) {
-
-		for ( var i = registeredMouseEventObj.length; i--;) {
+		api.mouseMove = function(e, v) {
+			
+		for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
+		{		
+			if (!obj.isClickable)
+				continue;
 				
-				if ((x > registeredMouseEventObj[i].left) && (x < registeredMouseEventObj[i].right) && 
-					(y > registeredMouseEventObj[i].top) && (y < registeredMouseEventObj[i].bottom)) 
+				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
+					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
 				{
 					if (registeredMouseEventObj[i].mouseInside != true)
 						registeredMouseEventObj[i].mouseIn(e);
 					registeredMouseEventObj[i].mouseInside = true;
-					registeredMouseEventObj[i].mouseMove(x, y, e);
+					registeredMouseEventObj[i].mouseMove(v.x, v.y, e);
 				}
 				else
 				{

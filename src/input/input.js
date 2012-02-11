@@ -38,6 +38,8 @@
 		// callback function for mouse & gyro
 		var mouseEventCB = null;
 		var mouseMoveCB = null;
+		var mouseDownCB = null;
+		var mouseUpCB = null;
 		var gyroEventCB = null;
 
 		// some usefull flags
@@ -159,6 +161,7 @@
 			---								*/
 		function translateMouseCoords(x, y) {
 			var canvas = me.video.getScreenCanvas();
+			
 			return new me.Vector2d(x + document.body.scrollLeft + document.documentElement.scrollLeft - ~~canvas.offsetLeft,
 								   y + document.body.scrollTop + document.documentElement.scrollTop - ~~canvas.offsetTop + 1);
 		};
@@ -170,8 +173,30 @@
 			
 			---										*/
 		function onMouseEvent(e) {
+
 			// propagate the event to the callback with x,y coords
-			mouseEventCB(translateMouseCoords(e.clientX, e.clientY));
+			mouseEventCB(e, translateMouseCoords(e.clientX, e.clientY));
+			//mouseEventCB(e, translateMouseCoords(e.clientX, e.clientY));
+		};
+		/* ---
+		
+			 mouse event management (click)
+			
+			---										*/
+		function onMouseDown(e) {
+
+			// propagate the event to the callback with x,y coords
+			mouseDownCB(e, translateMouseCoords(e.clientX, e.clientY));
+		};
+		/* ---
+		
+			 mouse event management (click)
+			
+			---										*/
+		function onMouseUp(e) {
+
+			// propagate the event to the callback with x,y coords
+			mouseUpCB(e, translateMouseCoords(e.clientX, e.clientY));
 		};
 		/* ---
 		
@@ -179,11 +204,9 @@
 			
 			---										*/
 		function onMouseMove(e) {
-			var x = e.clientX - me.video.getScreenCanvas().offsetLeft;
-			var y = e.clientY - me.video.getScreenCanvas().offsetTop;
-
+	
 			// propagate the event to the callback with x,y coords
-			mouseMoveCB(x, y, e);
+			mouseMoveCB(e, translateMouseCoords(e.clientX, e.clientY));
 
 		}
 		;
@@ -370,13 +393,19 @@
 			if (enable) {
 				// add a listener for the mouse
 				me.video.getScreenCanvas().addEventListener('click', onMouseEvent, false);
+				me.video.getScreenCanvas().addEventListener('mousedown', onMouseDown, false);
+				me.video.getScreenCanvas().addEventListener('mouseup', onMouseUp, false);
 				me.video.getScreenCanvas().addEventListener('mousemove', onMouseMove, false);
+				
 				// set the callback
 				mouseEventCB = callback || me.game.mouseEvent.bind(me.game);
 				mouseMoveCB = me.game.mouseMove.bind(me.game);
+				mouseDownCB = me.game.mouseDown.bind(me.game);
+				mouseUpCB = me.game.mouseUp.bind(me.game);
 			} else {
 				me.video.getScreenCanvas().removeEventListener('click', onMouseEvent, false);
 				me.video.getScreenCanvas().removeEventListener('mousemove', onMouseMove, false);
+				me.video.getScreenCanvas().removeEventListener('mousedown', onMouseDown, false);
 			}
 		};
 
