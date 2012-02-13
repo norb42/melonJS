@@ -411,6 +411,7 @@
 				me.video.getScreenCanvas().removeEventListener('click', onMouseEvent, false);
 				me.video.getScreenCanvas().removeEventListener('mousemove', onMouseMove, false);
 				me.video.getScreenCanvas().removeEventListener('mousedown', onMouseDown, false);
+				me.video.getScreenCanvas().removeEventListener('mouseup', onMouseUp, false);
 			}
 		};
 

@@ -1258,18 +1258,16 @@
 		 * propagate mouse event to objects
 		 * @private
 		 */
-		api.mouseEvent = function(e, v) {
+		api.mouseEvent = function(v) {
 			for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) {
-
-			if (!obj.isClickable)
-				continue;
-				
-				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
-					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
-					{
-						obj.clicked(v.x, v.y, e);
+				if (obj.isClickable && obj.collisionBox.containsPoint(v)) {
+					if (obj.clicked()){
+						// stop propagating the event
+						// if the functin return true
+						break;
 					}
 				}
+			}
 		};
 
 		/**- 
@@ -1277,16 +1275,12 @@
 		 * @private
 		 */
 		api.mouseDown = function(e, v) {
-		for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
-		{
-			if (!obj.isClickable)
-				continue;
-				
-				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
-					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
-					{
-						obj.mouseDown(v.x, v.y, e);
-					}
+			for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
+			{
+				if (obj.isClickable && obj.collisionBox.containsPoint(v))
+				{
+					obj.mouseDown(v.x, v.y, e);
+				}
 			}
 		};
 
@@ -1295,16 +1289,12 @@
 		 * @private
 		 */
 		api.mouseUp = function(e, v) {
-		for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
-		{
-			if (!obj.isClickable)
-				continue;
-				
-				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
-					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
-					{
+			for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
+			{
+				if (obj.isClickable && obj.collisionBox.containsPoint(v))
+				{
 						obj.mouseUp(v.x, v.y, e);
-					}
+				}
 			}
 		};
 		
@@ -1315,13 +1305,9 @@
 		
 		api.mouseMove = function(e, v) {
 			
-		for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
-		{		
-			if (!obj.isClickable)
-				continue;
-				
-				if ((v.x > registeredMouseEventObj[i].left) && (v.x < registeredMouseEventObj[i].right) && 
-					(v.y > registeredMouseEventObj[i].top) && (v.y < registeredMouseEventObj[i].bottom))
+			for (var i = registeredMouseEventObj.length, obj; i--, obj = registeredMouseEventObj[i];) 
+			{		
+				if (obj.isClickable && obj.collisionBox.containsPoint(v))
 				{
 					if (registeredMouseEventObj[i].mouseInside != true)
 						registeredMouseEventObj[i].mouseIn(e);
