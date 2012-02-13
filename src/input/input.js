@@ -182,7 +182,6 @@
 
 			// propagate the event to the callback with x,y coords
 			mouseEventCB(e, translateMouseCoords(e.clientX, e.clientY));
-			//mouseEventCB(e, translateMouseCoords(e.clientX, e.clientY));
 		};
 		/* ---
 		
