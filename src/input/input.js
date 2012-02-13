@@ -159,13 +159,19 @@
 			 translate Mouse Coordinates
 			
 			---								*/
-		function translateMouseCoords(x, y) {
-			var canvas = me.video.getScreenCanvas();
-			
-			return new me.Vector2d(x + document.body.scrollLeft + document.documentElement.scrollLeft - ~~canvas.offsetLeft,
-								   y + document.body.scrollTop + document.documentElement.scrollTop - ~~canvas.offsetTop + 1);
-		};
+		 function translateMouseCoords(x, y) {
+				var obj = me.video.getScreenCanvas();
+				var curleft = 0;
+				var curtop = 0;
 
+				do {
+					curleft += obj.offsetLeft;
+					curtop += obj.offsetTop;
+				} while( obj = obj.offsetParent ) 
+
+				return new me.Vector2d(x - curleft,
+									   y - curtop);
+			};
 		
 		/* ---
 		
